@@ -1,0 +1,89 @@
+<form [formGroup]="profileForm" (ngSubmit)="updateProfile()" style="width: 400px;background-color: #f2f2f2;" class="p-4">
+    <h4 class="text-center" style="color: orange;">Edit Your Profile</h4>
+    <div class="form-group">
+      
+      <div class="profile-pic-container" formControlName="profile_pic" (click)="triggerFileInput()">
+        
+        <img *ngIf="profileImage; else defaultPic" [src]="'data:image/jpg;base64,' + profileImage"  alt="Profile Picture"  class="profile-pic" />
+        
+       
+        <ng-template #defaultPic>
+          <div class="profile-pic-placeholder">
+            <span class="plus-icon">+</span>
+          </div>
+        </ng-template>
+        
+        
+        <div class="overlay">
+          <span class="edit-icon">+</span>
+        </div>
+      </div>
+    
+      
+      <input
+        id="profile_pic" type="file" accept="image/*" (change)="onFileChange($event)" style="display: none;" #fileInput />
+    
+     
+      <div *ngIf="profileForm.controls['profile_pic'].invalid && profileForm.controls['profile_pic'].touched" class="text-danger">
+        Profile Picture is required.
+      </div>
+    </div>
+    
+    
+    
+  
+      <div class="form-group ">
+        <label for="full_name">Full Name*</label>
+        <input id="full_name" formControlName="full_name" class="form-control" placeholder="Enter your full name" />
+        <div *ngIf="profileForm.controls['full_name'].invalid && profileForm.controls['full_name'].touched" class="text-danger">
+          Full Name is required.
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="father_name">Father's Name</label>
+        <input id="father_name" formControlName="father_name" class="form-control" placeholder="Enter your father's name" />
+        <div *ngIf="profileForm.controls['father_name'].invalid && profileForm.controls['father_name'].touched" class="text-danger">
+          Father's Name is required.
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender" formControlName="gender" class="form-control"  >
+          <option value="">Select Gender</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="OTHER">Other</option>
+        </select>
+        <div *ngIf="profileForm.controls['gender'].invalid && profileForm.controls['gender'].touched" class="text-danger">
+          Gender is required.
+        </div>
+      </div>
+    
+
+    
+      <div class="form-group">
+        <label for="contact_number">Contact Number*</label>
+        <input id="contact_number" formControlName="contact_number" class="form-control" placeholder="Enter your contact number" />
+        <div *ngIf="profileForm.controls['contact_number'].invalid && profileForm.controls['contact_number'].touched" class="text-danger">
+          Contact Number is required.
+        </div>
+      </div>
+  
+     
+      
+    
+      <div class="form-group">
+        <label for="email">Email*</label>
+        <input id="email" type="email" formControlName="email" class="form-control" placeholder="Enter your email" />
+        <div *ngIf="profileForm.controls['email'].invalid && profileForm.controls['email'].touched" class="text-danger">
+          A valid Email is required.
+        </div>
+      </div>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary" style="background-color: orange; border-color: orange;" >Update Profile</button>
+    </div>
+    </form>
+    
+    

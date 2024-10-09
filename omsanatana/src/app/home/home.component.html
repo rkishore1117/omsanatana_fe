@@ -8,49 +8,57 @@
   </div>
 
 
-
   <div class="container mt-5">
-    <div id="latestArticlesCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <ng-container *ngFor="let article of latestArticles; let i = index">
-            <div class="carousel-item" [class.active]="i === 0">
-              <img [src]="article.imageUrl" class="d-block w-100" alt="{{ article.title }}">
-              <div class="carousel-caption d-none d-md-block">
-                <img 
+    <div *ngIf="latestArticles.length > 0" id="latestArticlesCarousel" class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="hover">
+      <div class="carousel-inner">
+        <ng-container *ngFor="let article of latestArticles; let i = index">
+          <div class="carousel-item" [class.active]="i === 0">
+            <img [src]="article.imageUrl" class="d-block w-100" alt="{{ article.title }}">
+            <div class="carousel-caption d-none d-md-block">
+              <img 
                 [src]="article.image_location ? 'data:image/jpeg;base64,' + article.image_location : '../../assets/images/modi.jpg'" 
                 class="d-block w-100 responsive-image" 
                 alt="{{ article?.headline }}" 
                 style="object-fit: fill;"
               >
-               
-                <h5>{{ article.name }}</h5>
-              </div>
+              <h5>{{ article.name }}</h5>
             </div>
-          </ng-container>
-        </div>
-      
-        <a class="carousel-control-prev" href="#latestArticlesCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#latestArticlesCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
+          </div>
+        </ng-container>
       </div>
-  </div>
-
-  
-<div class="container" style="margin-top: 100px;">
-    <div *ngIf="categories && categories.length > 0; else noCategories">
-        <div *ngFor="let category of categories" class="category-card">
-            <h6>{{ category.name }}</h6>
-            
-        </div>
+      <a class="carousel-control-prev" href="#latestArticlesCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#latestArticlesCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
-    
-    <ng-template #noCategories>
+  </div>
+  
+  
+  
+  <div class="container" style="margin-top: 100px;">
+    <div class="row">
+      <div class="col-md-3" *ngIf="categories && categories.length > 0; else noCategories">
+        <div *ngFor="let category of categories" class="category-card">
+          <span class="bullet">&#10146;</span> {{ category.name }}
+        </div>
+        <div *ngFor="let category of religious" class="category-card">
+          <span class="bullet">&#10146;</span> {{ category.name }}
+        </div>
+      </div>
+  
+      <ng-template #noCategories>
         <p>No categories found.</p>
-    </ng-template>
-</div>
+      </ng-template>
+  
+      <!-- Image Section -->
+      <div class="col-md-8">
+        <img src="../../assets/images/1st chart.png" alt="Chart" class="img-fluid custom-img" />
+      </div>
+    </div>
+  </div>
+  
 

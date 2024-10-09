@@ -1,0 +1,10 @@
+.highlight {
+    background-color: yellow; /* Highlight color */
+    font-weight: bold; /* Optional: make it bold */
+    cursor: pointer; /* Indicate that it's clickable */
+  }
+  
+  .highlight:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  

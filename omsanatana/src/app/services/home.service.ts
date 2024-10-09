@@ -4,6 +4,7 @@ import { HttpClient,HttpHeaders,HttpParams  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 // import { URL } from '../../constants';
 import { URL } from '../../constants';
+import { URL1 } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +18,16 @@ export class HomeService {
 
 
   homepage():Observable<any>{
-    return this.httpClient.get(URL+"maincategory/")
+    // return this.httpClient.get(URL+"maincategory/")
+    return this.httpClient.get(URL+"index/")
+
   }
 
+  header():Observable<any>{
+    return this.httpClient.get(URL+"maincategory/")
+    // return this.httpClient.get(URL+"index/")
 
+  }
 
   latestpage():Observable<any>{
     return this.httpClient.get(URL+"homeimages")

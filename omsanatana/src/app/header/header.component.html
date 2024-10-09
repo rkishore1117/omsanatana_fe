@@ -57,6 +57,12 @@
               <a data-bs-dismiss="offcanvas" class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
             </li>
 
+
+
+            <!-- <li class="nav-item active">
+              <a data-bs-dismiss="offcanvas" class="nav-link" routerLink="About-us" routerLinkActive="active">About us</a>
+            </li> -->
+
             <li class="nav-item dropdown">
               <a class="nav-link " href="#" id="navbarDropdown" 
                  role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -73,18 +79,24 @@
               </ul>
             </li>
 
-            <!-- <li class="nav-item">
-              <a data-bs-dismiss="offcanvas" class="nav-link" routerLink="Organizations" routerLinkActive="active">Ancient Literature</a>
+            <li class="nav-item" *ngFor="let categeory of categories">
+              <label
+                (click)="onCategoryClick(categeory._id, categeory.name); toggleSidebar()"
+                [ngClass]="{'highlight': categeory._id === selectedCategoryId, 'default-color': categeory._id !== selectedCategoryId}"
+                class="nav-link py-2"
+                style="cursor: pointer; text-transform: capitalize;"
+              >
+                {{ categeory.name }}
+              </label>
             </li>
-            <li class="nav-item">
-              <a data-bs-dismiss="offcanvas" class="nav-link" routerLink="event" routerLinkActive="active">Religious</a>
-            </li>
+
+
             <li class="nav-item">
               <a data-bs-dismiss="offcanvas" class="nav-link" routerLink="Training" routerLinkActive="active">Trainings</a>
-            </li> -->
+            </li>
   
 
-                <!-- <div *ngIf="!authenticationService.isLoggedIn" class="nav-item-container d-flex flex-column">
+                <div *ngIf="!authenticationService.isLoggedIn" class="nav-item-container d-flex flex-column">
                   <li class="nav-item">
                     <a data-bs-dismiss="offcanvas" id="signUp" [ngClass]="getButtonClasses()" 
                       (click)="openSignupDialog()" style="color: white; background-color: orange;">
@@ -98,9 +110,10 @@
                     <li class="nav-item dropdown">
                       <a class="nav-link " href="#" id="navbarDropdown" 
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img [src]="user.profile_pic ?  user.profile_pic : '../../assets/images/profile1.webp'" 
+                        <img           [src]="user.profile_pic ? 'data:image/jpeg;base64,' +  user.profile_pic : '../../assets/images/profile1.webp'"
+ 
                             class="card-img-top profile-picture" 
-                            alt="Profile Picture" 
+                            alt="" 
                             style="height: 35px; width: 35px; border-radius: 50%;">
                       </a>
                       
@@ -114,7 +127,7 @@
                       </ul>
                     </li>
                   </ul>
-                </div> -->
+                </div>
           </ul>
         </div>
       </div>

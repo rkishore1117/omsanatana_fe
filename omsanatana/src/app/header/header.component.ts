@@ -17,6 +17,10 @@ import { MatDialog } from '@angular/material/dialog';
 // import { MemberProfileComponent } from '../member-profile/member-profile.component';
 // import { SharedService } from '../services/shared.service';
 import { Subscription } from 'rxjs';
+import { HomeService } from '../services/home.service';
+import { SignupComponent } from '../signup/signup.component';
+import { AuthenticationService } from '../services/authentication.service';
+import { UserService } from '../services/user.service';
 
 
 @Component({
@@ -31,9 +35,12 @@ export class HeaderComponent {
 
 
   isSmallScreen = window.innerWidth < 992;
+  newscategories: any[] = [];  
+  selectedCategoryId: string | null = null;
 
+  categories:any;
 
-  constructor(private dialog:MatDialog,private router:Router,){
+  constructor(private dialog:MatDialog,private router:Router,private homeservice:HomeService,protected authenticationService:AuthenticationService,private userservice:UserService,){
   }
 
 
@@ -78,54 +85,80 @@ export class HeaderComponent {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-  // openSignupDialog(): void {
-  //   const dialogRef = this.dialog.open(SignupComponent, {
-  //     data: { displayName: 'signup' }, 
-  //     autoFocus: false, 
-  //     backdropClass: 'dialog-backdrop',
-  //   });
-    
-  //   dialogRef.afterClosed().subscribe(() => {
-      
-  //   });
-  // }
+  ngOnInit(): void {
+    this.fetchheader();
+  }
 
-  // doLogout(){
-  //   this.authenticationService.logout();
-  // }
+   fetchheader(): void {
+    this.homeservice.header().subscribe(
+      (data: any) => {
+        this.categories = data.results.sort((a: any, b: any) => {
+          return a.name.localeCompare(b.name); 
+        });;
 
-
-
-
-
-
-  // user: any = {};
-  // getUserProfile(): void {
-  //   const userId = localStorage.getItem('user'); 
-  //   this.userservice.profiledata(userId).subscribe(
-  //     (data) => {
-  //       this.user = data;
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching user data:', error);
-  //     }
-  //   );
-  // }
+      },
+      (error) => {
+        console.error('Error fetching organizations:', error);
+      }
+    );
+  }
 
 
 
+  onCategoryClick(categoryId: string, categoryName: string) {
+    this.router.navigate(['/religion', categoryId]);
 
-
-  // navigateTo(route: string): void {
-  //   const ismember = localStorage.getItem('is_member') === 'true'; 
-  //   console.log("hsjfdjdkjfkdfjhdhfu",ismember)
+  }
   
-  //   if (ismember) {
-  //     this.router.navigate([route]);
-  //   } else {
-  //     this.userservice.showMemberModal();
-  //   }
-  // }
+
+  openSignupDialog(): void {
+    const dialogRef = this.dialog.open(SignupComponent, {
+      data: { displayName: 'signup' }, 
+      autoFocus: false, 
+      backdropClass: 'dialog-backdrop',
+    });
+    
+    dialogRef.afterClosed().subscribe(() => {
+      
+    });
+  }
+
+  doLogout(){
+    this.authenticationService.logout();
+  }
+
+
+
+
+
+
+  user: any = {};
+  getUserProfile(): void {
+    const userId = localStorage.getItem('user'); 
+    this.userservice.profiledata(userId).subscribe(
+      (data) => {
+        this.user = data;
+      },
+      (error) => {
+        console.error('Error fetching user data:', error);
+      }
+    );
+  }
+
+
+
+
+
+  navigateTo(route: string): void {
+    const ismember = localStorage.getItem('is_member') === 'true'; 
+    console.log("hsjfdjdkjfkdfjhdhfu",ismember)
+  
+    if (ismember) {
+      this.router.navigate([route]);
+    } else {
+      this.userservice.showMemberModal();
+    }
+  }
 
 
   

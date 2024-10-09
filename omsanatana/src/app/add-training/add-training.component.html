@@ -1,0 +1,237 @@
+<div class="container py-4 header-m">
+    <div class="form-card">
+        <form [formGroup]="organizationForm" (ngSubmit)="onSubmit()" class="p-5">
+            <div class="row mt-5">
+                <h3 class="section-header-title text-center">Add a Training</h3>
+            </div>
+
+            <h3 class="organization-form-heading">Training Details</h3>
+            <hr />
+
+            <div class="row mb-2">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="name">Training Name *</label>
+                        <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter the Training Name" [class.is-invalid]="organizationForm.get('name')?.touched && organizationForm.get('name')?.invalid">
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="trainer_name">Trainer Name *</label>
+                        <input type="text" class="form-control" id="trainer_name" formControlName="trainer_name" placeholder="Enter the Trainer Name" [class.is-invalid]="organizationForm.get('trainer_name')?.touched && organizationForm.get('trainer_name')?.invalid">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_details">Contact Details *</label>
+                        <input type="text" class="form-control" id="contact_details" formControlName="contact_details" placeholder="Enter the Contact Details" [class.is-invalid]="organizationForm.get('contact_details')?.touched && organizationForm.get('contact_details')?.invalid">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="category" class="form-label">Category *</label>
+                        <select class="form-control" id="category" formControlName="category"
+                                (change)="onCategoryChange($event)"
+                                [class.is-invalid]="organizationForm.get('category')?.touched && organizationForm.get('category')?.invalid">
+                          <option value="" disabled selected>Select a category</option>
+                          <option *ngFor="let option of combinedCategoryOptions" [value]="option.value">{{ option.label }}</option>
+                        </select>
+                      </div>  
+                    
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="start_date">Start Date *</label>
+                        <input type="datetime-local" class="form-control" id="start_date" formControlName="start_date" [class.is-invalid]="organizationForm.get('start_date')?.touched && organizationForm.get('start_date')?.invalid">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="end_date">End Date *</label>
+                        <input type="datetime-local" class="form-control" id="end_date" formControlName="end_date" [class.is-invalid]="organizationForm.get('end_date')?.touched && organizationForm.get('end_date')?.invalid">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="training_link">Training Link *</label>
+                        <input type="url" class="form-control" id="training_link" formControlName="training_link" placeholder="Provide The Correct Link" [class.is-invalid]="organizationForm.get('training_link')?.touched && organizationForm.get('training_link')?.invalid">
+                    </div>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="gender">Training Type *</label>
+                    <select class="form-control" id="gender" formControlName="training_type" required>
+                        <option value="" disabled selected>Select your Mode</option>
+                        <option value="online">ONLINE</option>
+                        <option value="offline">OFFLINE</option>
+                    </select>
+                </div>
+
+                <!-- <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="start_time">Start Time</label>
+                        <input type="time" class="form-control" id="start_time" formControlName="start_time" [class.is-invalid]="organizationForm.get('start_time')?.touched && organizationForm.get('start_time')?.invalid">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="end_time">End Time</label>
+                        <input type="time" class="form-control" id="end_time" formControlName="end_time" [class.is-invalid]="organizationForm.get('end_time')?.touched && organizationForm.get('end_time')?.invalid">
+                    </div>
+                </div> -->
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <textarea class="form-control" id="location" formControlName="location" placeholder="Enter the Location" [class.is-invalid]="organizationForm.get('location')?.touched && organizationForm.get('location')?.invalid"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="desc">Description *</label>
+                        <textarea class="form-control" id="desc" formControlName="desc" placeholder="Enter the Description" [class.is-invalid]="organizationForm.get('desc')?.touched && organizationForm.get('desc')?.invalid"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="continent">Continent *</label>
+                        <select class="form-control" id="continent" formControlName="continent"[class.is-invalid]="organizationForm.get('continent')?.touched && organizationForm.get('continent')?.invalid">
+                            <option *ngFor="let option of ContinentOptions" [value]="option.value">{{ option.label }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="country">Country *</label>
+                        <select class="form-control" id="country" formControlName="country" [class.is-invalid]="organizationForm.get('country')?.touched && organizationForm.get('country')?.invalid">
+                            <option *ngFor="let option of CountryOptions" [value]="option.value">{{ option.label }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="state">State *</label>
+                        <select class="form-control" id="state" formControlName="state" [class.is-invalid]="organizationForm.get('state')?.touched && organizationForm.get('state')?.invalid">
+                            <option *ngFor="let option of StateOptions" [value]="option.value">{{ option.label }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="object_id">District *</label>
+                        <select class="form-control" id="object_id" formControlName="object_id" [class.is-invalid]="organizationForm.get('object_id')?.touched && organizationForm.get('object_id')?.invalid">
+                            <option *ngFor="let option of DistrictOptions" [value]="option.value">{{ option.label }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                  <label>Upload image *</label>
+                  <nz-upload
+                    nzListType="picture-card"
+                    [(nzFileList)]="bannerFileList"
+                    [nzShowButton]="bannerFileList.length < 1"
+                    (nzChange)="handleBannerFileChange($event)"
+                    [nzAccept]="'image/*'"
+                    (nzRemove)="handleBannerFileRemove()">
+                    <div>
+                      <i nz-icon nzType="plus"></i>
+                      Upload Image
+                    </div>
+                  </nz-upload>
+
+
+
+                </div>
+                    <!-- <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="video">Upload Video *</label>
+                          <input type="file" class="form-control square-input" id="video" formControlName="video" (change)="onVideoSelected($event)" accept="video/*" [class.is-invalid]="organizationForm.get('video')?.touched && organizationForm.get('video')?.invalid">
+
+                        </div>
+                      </div> -->
+
+
+                      <!-- <div class="col-md-4">
+                        <div class="form-group">
+                          <nz-upload
+                            nzListType="text"
+                            [(nzFileList)]="videoFileList"
+                            [nzShowButton]="videoFileList.length < 1"
+                            (nzChange)="handleVideoFileChange($event)"
+                            [nzAccept]="'video/*'"
+                            (nzRemove)="handleVideoFileRemove()">
+                            <div>
+                              <i nz-icon nzType="plus"></i>
+                              Upload Video
+                            </div>
+                          </nz-upload>
+                        </div>
+                      </div> -->
+
+                      <!-- <div class="container"> -->
+                   
+                          <div class="col-md-4">
+                            <label>Upload video *</label>
+
+                            <div class="form-group video-container">
+                              <nz-upload
+                                nzListType="text"
+                                [(nzFileList)]="videoFileList"
+                                [nzShowButton]="videoFileList.length < 1"
+                                (nzChange)="handleVideoFileChange($event)"
+                                [nzAccept]="'video/*'"
+                                (nzRemove)="handleVideoFileRemove()">
+                                <div>
+                                  <i nz-icon nzType="plus"></i>
+                                  Upload Video
+                                </div>
+                              </nz-upload>
+                            </div>
+                          </div>
+                      
+                      <!-- </div> -->
+                      
+                      
+            </div>
+
+
+              
+
+            <!-- <div class="row">
+                <div class="text-center">
+                    <button type="submit" class="btn" style="background-color: orange;" [disabled]="formDisabled">Submit</button>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="text-center">
+                    <button type="submit" class="btn" style="background-color: orange;" [disabled]="formDisabled || loading">
+                        <ng-container *ngIf="!loading; else loadingTemplate">
+                            Submit
+                        </ng-container>
+                        <ng-template #loadingTemplate>
+                            <div class="spinner-border"></div> Loading...
+                        </ng-template>
+                    </button>
+                </div>
+            </div>
+ 
+        </form>
+    </div>
+</div>

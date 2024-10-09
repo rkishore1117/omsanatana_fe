@@ -51,3 +51,8 @@ button{
       height: 20vh;
   }
 }
+
+.category-card {
+  font-size: 18px;  
+  margin-bottom: 10px;  
+}
