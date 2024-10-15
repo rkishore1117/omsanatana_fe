@@ -21,6 +21,7 @@ import { HomeService } from '../services/home.service';
 import { SignupComponent } from '../signup/signup.component';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
+import { SharedService } from '../services/shared.service';
 
 
 @Component({
@@ -40,7 +41,7 @@ export class HeaderComponent {
 
   categories:any;
 
-  constructor(private dialog:MatDialog,private router:Router,private homeservice:HomeService,protected authenticationService:AuthenticationService,private userservice:UserService,){
+  constructor(private dialog:MatDialog,private router:Router,private homeservice:HomeService,protected authenticationService:AuthenticationService,private userservice:UserService,private sharedService:SharedService){
   }
 
 
@@ -62,15 +63,17 @@ export class HeaderComponent {
   }
 
 
-  // ngOnInit(): void {
-  //   this.subscription.add(
-  //     this.sharedService.triggerFetchprofileData$.subscribe(() => {
-  //       this.getUserProfile();
-  //     })
-  //   );
+  ngOnInit(): void {
+    this.subscription.add(
+      this.sharedService.triggerFetchprofileData$.subscribe(() => {
+        this.getUserProfile();
+      })
+    );
     
-  //   this.getUserProfile();
-  // }
+    this.getUserProfile();
+    this.fetchheader();
+
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -85,9 +88,9 @@ export class HeaderComponent {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
-  ngOnInit(): void {
-    this.fetchheader();
-  }
+  // ngOnInit(): void {
+  //   this.fetchheader();
+  // }
 
    fetchheader(): void {
     this.homeservice.header().subscribe(

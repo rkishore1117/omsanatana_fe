@@ -1,35 +1,17 @@
 .carousel-item img {
-    height: 400px; 
+    height: 200px; 
     object-fit: cover; 
   }
   
-  .carousel-caption {
-    background-color: rgba(0, 0, 0, 0.5); 
-    padding: 10px;
-  }
-  
-button:hover{
-  transform: scale(1.05);
-}
-button{
-  width:200px;
-}
-
 .responsive-image {
   width: 100%;
 }
-
-.responsive {
-  width: 100%;
-
-}
-
 
 @media (min-width: 1200px) {
   .responsive-image {
       height: 35vh;
   }
-  .responsive {
+  .carousel-item img {
       height: 50vh;
   }
 }
@@ -38,7 +20,7 @@ button{
   .responsive-image {
       height: 40vh;
   }
-  .responsive {
+  .carousel-item img {
       height: 45vh;
   }
 }
@@ -47,7 +29,7 @@ button{
   .responsive-image {
       height: 20vh;
   }
-  .responsive {
+  .carousel-item img {
       height: 20vh;
   }
 }

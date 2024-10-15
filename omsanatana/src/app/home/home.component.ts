@@ -1,13 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HomeService } from '../services/home.service';
 import { CommonModule } from '@angular/common';
+// import {
+//   CarouselComponent,
+//   CarouselInnerComponent,
+//   CarouselItemComponent,
+//   CarouselControlComponent,
+//   CarouselCaptionComponent,
+//   CarouselIndicatorsComponent,
+//   ThemeDirective
+// } from '@coreui/angular';
 
 
 
 
-declare var $: any;
+// declare var $: any;
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -15,13 +24,15 @@ declare var $: any;
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy{
   categories: any[] = [];
   latestArticles: any[] = [];
   articlesdata: any = {}; 
   religious: any[] = [];
-
-
+  slides: any[] =[]
+  intervalId: any;
+  subCategories: any[] = [];
+  training: any[] = [];
 
 
 
@@ -30,26 +41,15 @@ export class HomeComponent {
   ngOnInit(): void {
     this.fetchhome();
     this.fetchLatest();
+    this.startAutoScroll();
+    this.fetchtraining();
   }
-
-
-  // fetchhome(): void {
-  //   this.homepageservice.homepage().subscribe(
-  //     (data: any) => {
-  //       this.categories = data.results;
-
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching organizations:', error);
-  //     }
-  //   );
-  // }
 
   fetchhome(): void {
     this.homepageservice.homepage().subscribe(
       (data: any) => {
-        this.categories = data.main_categories;
-        this.religious = data.religion_categories;
+        this.categories = data.index;
+        // this.religious = data.religion_categories;
 
 
       },
@@ -59,11 +59,26 @@ export class HomeComponent {
     );
   }
 
+  fetchtraining(): void {
+    this.homepageservice.training().subscribe(
+      (data: any) => {
+        this.training = data.training_categories;
+        // this.religious = data.religion_categories;
+
+
+      },
+      (error) => {
+        console.error('Error fetching organizations:', error);
+      }
+    );
+  }
+
+
   fetchLatest(): void {
     this.homepageservice.latestpage().subscribe(
       (data: any) => {
-        this.latestArticles = data.main_category;
-        this.initializeCarousel(); // Initialize the carousel after data is loaded
+        this.slides = data.main_category;   
+            
       },
       error => {
         console.error('Error fetching latest articles', error);
@@ -71,19 +86,42 @@ export class HomeComponent {
     );
   }
 
-  initializeCarousel(): void {
-    setTimeout(() => {
-      // Initialize Bootstrap carousel after rendering the articles
-      $('#latestArticlesCarousel').carousel({
-        interval: 3000, // Change slides every 3 seconds
-        pause: 'hover' // Pause on hover
-      });
-    }, 100); // Delay to allow Angular rendering
+  
+
+
+  startAutoScroll(): void {
+    this.intervalId = setInterval(() => {
+      this.moveToNextSlide();
+    }, 3000); 
   }
 
-  handleCardClick(): void {
-    this.router.navigate(['/articles']);
+  moveToNextSlide(): void {
+    if (this.slides.length > 0) {
+      const firstSlide = this.slides.shift(); 
+      this.slides.push(firstSlide); 
+    }
   }
 
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId); 
+    }
+  }
+
+  
+navigateToCategory(categoryId: number): void {
+  this.router.navigate(['religion', categoryId]); 
+}
+navigateToTraining(){
+  this.router.navigate(['Training']);
 
 }
+navigateToindex(){
+  this.router.navigate(['religion/:id']);
+
+}
+}
+
+
+
+

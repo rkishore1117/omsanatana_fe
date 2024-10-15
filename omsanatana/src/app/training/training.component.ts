@@ -166,10 +166,28 @@ export class TrainingComponent {
     this.applyFilters();
   }
   
+  // loadSubcategories(node: NzTreeNode): void {
+  //   this.trainingservice.gettrainingsubCategories(node.key).subscribe(
+  //     (subcategories: any[]) => {
+  //       const children = subcategories.filter(sub => sub.category === node.key)
+  //         .map(sub => ({
+  //           title: sub.name,
+  //           key: sub._id,
+  //           isLeaf: true 
+  //         }));
+  
+  //       node.addChildren(children);
+  //       node.isExpanded = true;
+  //     },
+  //     (err: any) => console.error('Error loading subcategories:', err)
+  //   );
+  // }
+
+
   loadSubcategories(node: NzTreeNode): void {
-    this.trainingservice.gettrainingsubCategories().subscribe(
+    this.trainingservice.gettrainingsubCategories(node.key).subscribe(
       (subcategories: any[]) => {
-        const children = subcategories.filter(sub => sub.category === node.key)
+        const children = subcategories.filter(sub => sub.category_id === node.key) // Adjust according to the property name in your response
           .map(sub => ({
             title: sub.name,
             key: sub._id,
@@ -267,7 +285,7 @@ export class TrainingComponent {
     } else {
         this.trainingservice.getalltrainings().subscribe(
             (data: any) => {
-                this.organizations = data;  
+                this.organizations = data.results;  
                 console.log(this.organizations, "Filtered orginazations without Category or Location");
             },
             (error) => {
@@ -447,7 +465,9 @@ export class TrainingComponent {
     this.router.navigate(["getbytraining",_id])
   }
 
-  
+    navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 }
 
 

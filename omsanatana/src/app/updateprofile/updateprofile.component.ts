@@ -60,6 +60,7 @@ export class UpdateprofileComponent {
         dob: response.dob,
         contact_number: response.contact_number,
         email: response.email,
+        
       });
 
       this.profile_pic = response.profile_pic;

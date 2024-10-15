@@ -424,7 +424,7 @@ private trainingservice:TrainingService,
           }));
           
 
-          this.trainingservice.gettrainingsubCategories().subscribe(
+          this.trainingservice.gettrainingsubCategoriesadd().subscribe(
             (subRes) => {
 
               if (subRes && Array.isArray(subRes)) {
@@ -460,7 +460,7 @@ private trainingservice:TrainingService,
   subCategoryOptions: any[] = [];
 
   fetchAllSubCategories(): void {
-    this.trainingservice.gettrainingsubCategories().subscribe(
+    this.trainingservice.gettrainingsubCategoriesadd().subscribe(
       (res) => {
 
         if (res && Array.isArray(res)) {

@@ -12,6 +12,7 @@ import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 import { NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { FormGroup, FormsModule,Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DomSanitizer ,SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-religion',
@@ -32,78 +33,30 @@ export class ReligionComponent {
 
 
 
-  constructor(private religiousservice:ReligiousService,private router:Router, private dialog:MatDialog,private route:ActivatedRoute, private fb:FormBuilder,private cdr: ChangeDetectorRef ) {}
+  constructor(private religiousservice:ReligiousService,private router:Router, private dialog:MatDialog,private route:ActivatedRoute, private fb:FormBuilder,private cdr: ChangeDetectorRef ,private sanitizer: DomSanitizer) {}
 
 
 
-// ngOnInit(): void {
-//   this.selectedCategoryId = this.route.snapshot.paramMap.get('id');
 
-//   this.religiousservice.categeories().subscribe(
-//     (response: any) => {
-//       const categories = response.results;
-//       this.nodes = this.createNodeTree(categories);
-
-//       // this.nodes.push({ 
-//       //   key: 'AllTemples', 
-//       //   title: 'All', 
-//       //   value: 'AllTemples', 
-//       //   isLeaf: true, 
-//       //   data: { type: 'all' } 
-//       // });
-
-//       this.nodes.sort((a, b) => a.title.localeCompare(b.title));
-      
-//     },
-//     (err: any) => console.error('Error loading categories:', err) 
-//   );
-//   this.fetchDefaultCategoryData();
-// }
-
-// onCategoryClick(event: NzFormatEmitEvent): void {
-//   const node: NzTreeNode = event.node!;
-//   this.selectedCategoryId = node.key;
-
-//   console.log(this.selectedCategoryId, "Category clicked");
-
-//   // this.router.navigate(["organizations", this.selectedCategoryId]);
-
-//   if (this.selectedCategoryId === 'AllTemples') {
-//     this.selectedCategoryId = '';
-//     return; 
-//   }
-
-
-//   this.religiousservice.getbydata(this.selectedCategoryId).subscribe(
-//     (data: any) => {
-//       this.categoryData = data; 
-//       console.log('Fetched category data:', this.categoryData);
-//     },
-//     (err: any) => console.error('Error fetching category data:', err)
-//   );
-
-//   if (!node.isExpanded && node.children.length === 0 && !node.isLeaf) {
-//     const nodeType = node.origin['data']?.type;
-
-//     if (nodeType === 'category') {
-//       this.loadSubcategories(node, this.selectedCategoryId);
-//     } else if (nodeType === 'subcategory') {
-//       this.loadMinisubcategories(node, this.selectedCategoryId);
-//     } else if (nodeType === 'minisubcategory') {
-//       this.loadSpecificCategories(node, this.selectedCategoryId);
-//     }
-//   } else {
-//     node.isExpanded = !node.isExpanded; 
-//   }
-// }
-
+categoryId: any;
 
 
 
 
 ngOnInit(): void {
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    if (id) {
+      this.categoryId = +id; 
+      this.fetchCategoryData(this.categoryId); 
+    }
+  });
+  
   this.selectedCategoryId = this.route.snapshot.paramMap.get('id');
 
+
+
+  
   this.religiousservice.categeories().subscribe(
     (response: any) => {
       const categories = response.results;
@@ -122,6 +75,9 @@ ngOnInit(): void {
 
 }
 
+
+
+
 onCategoryClick(event: NzFormatEmitEvent): void {
   const node: NzTreeNode = event.node!;
   this.selectedCategoryId = node.key;
@@ -132,6 +88,7 @@ onCategoryClick(event: NzFormatEmitEvent): void {
 
   if (this.selectedCategoryId === 'AllTemples') {
     this.selectedCategoryId = null; 
+    
     return; 
   }
 
@@ -262,28 +219,41 @@ createNodeTree(data: any[]): NzTreeNodeOptions[] {
 
 
 
+  isSideMenuOpen = false;
+  // isFilterVisible = true;
+  toggleSideMenu() {
+    this.isSideMenuOpen = !this.isSideMenuOpen;
+  }
+
+
+  // highlightText(text: string): string {
+  //   if (!text || !this.categoryData) {
+  //     return text;
+  //   }
+
+  //   const categoryNames = [this.categoryData.name, ...(this.categoryData.subcategories || []).map((sub: { name: any; }) => sub.name)];
+    
+  //   const escapedNames = categoryNames.map(name => name.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'));
+    
+  //   const pattern = escapedNames.join('|'); 
+  //   const regex = new RegExp(`(${pattern})`, 'gi'); 
+
+  //   return text.replace(regex, (match) => {
+  //     return `<a href="javascript:void(0);" class="highlight" (click)="navigateToCategory('${match}')">${match}</a>`;
+  //   });
+  // }
 
 
   
-
-
-  highlightText(text: string): string {
-    if (!text || !this.categoryData) {
-      return text;
-    }
-
-    const categoryNames = [this.categoryData.name, ...(this.categoryData.subcategories || []).map((sub: { name: any; }) => sub.name)];
-    
-    const escapedNames = categoryNames.map(name => name.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'));
-    
-    const pattern = escapedNames.join('|'); 
-    const regex = new RegExp(`(${pattern})`, 'gi'); 
-
-    return text.replace(regex, (match) => {
-      return `<a href="javascript:void(0);" class="highlight" (click)="navigateToCategory('${match}')">${match}</a>`;
-    });
+  highlightText(text: string): SafeHtml {
+    const keywords: string[] = ['Ancient Literature', 'Vedic Science and Traditions', 'Religion', 'Sruti','the'];
+    const regex = new RegExp(`(${keywords.join('|')})`, 'gi');
+    const highlightedText = text.replace(regex, '<span class="highlight">$1</span>');
+    return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
   }
 
+
+  
   navigateToCategory(categoryName: string): void {
     const category = this.categoryData.subcategories.find((sub: { name: string; }) => sub.name === categoryName) || this.categoryData;
     this.selectedCategoryId = category._id; 

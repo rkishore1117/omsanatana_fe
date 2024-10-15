@@ -39,4 +39,10 @@ getbydata(_id: string):Observable<any>{
   return this.httpClient.get(URL+'categoriesdata/'+_id)
 }
 
+
+
+
+
+
+
 }

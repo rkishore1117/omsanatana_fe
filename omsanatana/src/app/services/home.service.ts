@@ -33,6 +33,8 @@ export class HomeService {
     return this.httpClient.get(URL+"homeimages")
   }
 
-
+  training():Observable<any>{
+    return this.httpClient.get(URL+"training-categories-home/")
+  }
 
 }

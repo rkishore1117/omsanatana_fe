@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders,HttpParams  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { URL } from '../../constants';
-import { URL1 } from '../../constants';
+// import { URL1 } from '../../constants';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +16,13 @@ export class TrainingService {
 
 
   getTrainingCategories():Observable<any>{
-    return this.httpClient.get(URL1+"trainingcategory")   
+    return this.httpClient.get(URL+"trainingcategory/")   
     
   }
 
 
   getTrainings(categoryId: string,locationId: string): Observable<any> {
-    return this.httpClient.get(URL1+"locationByTraining",{
+    return this.httpClient.get(URL+"locationByTraining/",{
           params: {
             category: categoryId,
             input_value: locationId,
@@ -34,34 +34,37 @@ export class TrainingService {
 
 
       getalltrainings():Observable<any>{
-        return this.httpClient.get(URL1+"training")
+        return this.httpClient.get(URL+"training/")
       }
 
 
 
       trainingCategorydata(_id: string):Observable<any>{
-        return this.httpClient.get(URL1+'trainingcategory/'+_id)
+        return this.httpClient.get(URL+'trainingcategory/'+_id+'/')
  
       }
 
       getTrainingById(_id: string):Observable<any>{
-        return this.httpClient.get(URL1+'training/'+_id)
+        return this.httpClient.get(URL+'training/'+_id+'/')
  
       }
 
       addtraining(training: any): Observable<any> {
-        return this.httpClient.post(URL1+"training", training);
+        return this.httpClient.post(URL+"training", training);
       }
 
 
       
-      gettrainingsubCategories():Observable<any>{
-        return this.httpClient.get(URL1+"trainingsubcategory")   
+      gettrainingsubCategoriesadd():Observable<any>{
+        return this.httpClient.get(URL+"trainingsubcategory/")   
       }
 
-
+      
+      gettrainingsubCategories(_id:string):Observable<any>{
+        return this.httpClient.get(URL+"trainingcategory/"+_id+"/subcategories/")   
+      }
       traininggetById(_id: string):Observable<any>{
-        return this.httpClient.get(URL1+'trainingsubcategory/'+_id)
+        return this.httpClient.get(URL+'trainingsubcategory/'+_id+'/')
  
       }
 
@@ -70,18 +73,18 @@ export class TrainingService {
 
 
       getContinents():Observable<any>{
-        return this.httpClient.get(URL1+"continents")   
+        return this.httpClient.get(URL+"continents/")   
       }
     
       getCountries(_id: string): Observable<any[]> {
-        return this.httpClient.get<any[]>(URL1+"get-countriesBycontinent/"+_id);
+        return this.httpClient.get<any[]>(URL+"get-countriesBycontinent/"+_id);
       }
     
       getStates(_id: string): Observable<any[]> {
-        return this.httpClient.get<any[]>(URL1+"states_by_country/"+_id);
+        return this.httpClient.get<any[]>(URL+"states_by_country/"+_id);
       }
     
       getDistricts(_id: string): Observable<any[]> {
-        return this.httpClient.get<any[]>(URL1+"districts_by_state/"+_id);
+        return this.httpClient.get<any[]>(URL+"districts_by_state/"+_id);
       }
 }

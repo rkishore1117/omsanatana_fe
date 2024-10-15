@@ -5,47 +5,175 @@
         <img src="../../assets/images/Group 61.png" class="img-fluid responsive-image" alt="Image" style="border-radius: 31px; text-align: center;">
       </div>
     </div>
-  </div>
 
 
-  <div class="container mt-5">
-    <div *ngIf="latestArticles.length > 0" id="latestArticlesCarousel" class="carousel slide" data-ride="carousel" data-interval="3000" data-pause="hover">
-      <div class="carousel-inner">
-        <ng-container *ngFor="let article of latestArticles; let i = index">
-          <div class="carousel-item" [class.active]="i === 0">
-            <img [src]="article.imageUrl" class="d-block w-100" alt="{{ article.title }}">
-            <div class="carousel-caption d-none d-md-block">
+
+
+
+
+
+
+
+  <!-- <div id="carouselExample" class="carousel slide container mt-3" data-ride="carousel">
+    <div class="carousel-inner" > 
+      <div class="carousel-item" *ngFor="let slide of slides; let i = index" [class.active]="i === 0">
+        <img 
+          [src]="slide.image_location ? 'data:image/jpeg;base64,' + slide.image_location : '../../assets/images/modi.jpg'" 
+          class="img-fluid responsive-image" alt="Image" style="border-radius: 31px; text-align: center;object-fit: fill;"
+        >
+
+        <div class="carousel-caption  d-md-block" style="background: none;">
+          <h5 style="color: white;">{{ slide.name }}</h5>
+        </div>
+      </div>
+    </div>
+  
+    <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div> -->
+  
+  
+
+
+
+
+  <!-- <div class="container mt-3">
+    <div class="row">
+
+      <div class="col-md-2">
+        <div class="ad-container" style=" height: 100%; text-align: center;">
+          <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg" alt="Left Ad" class="img-fluid" style="border-radius: 10px;height: 100%;">
+        </div>
+      </div>
+  
+      <div class="col-md-8">
+        <div id="carouselExample" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner"> 
+            <div class="carousel-item" *ngFor="let slide of slides; let i = index" [class.active]="i === 0">
               <img 
-                [src]="article.image_location ? 'data:image/jpeg;base64,' + article.image_location : '../../assets/images/modi.jpg'" 
-                class="d-block w-100 responsive-image" 
-                alt="{{ article?.headline }}" 
-                style="object-fit: fill;"
+                [src]="slide.image_location ? 'data:image/jpeg;base64,' + slide.image_location : '../../assets/images/modi.jpg'" 
+                class="img-fluid responsive-image" alt="Image" style="border-radius: 31px; text-align: center; object-fit: fill;cursor: pointer;" 
+                (click)="navigateToCategory(slide._id)"
               >
-              <h5>{{ article.name }}</h5>
+  
+              <div class="carousel-caption d-md-block" style="background: none;">
+                <h5 style="color: white;">{{ slide.name }}</h5>
+              </div>
             </div>
           </div>
-        </ng-container>
+    
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
       </div>
-      <a class="carousel-control-prev" href="#latestArticlesCarousel" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#latestArticlesCarousel" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
+  
+      <div class="col-md-2">
+        <div class="ad-container" style=" height: 100%; ">
+          <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg" alt="Left Ad" class="img-fluid" style="border-radius: 10px;height: 100%;">
+        </div>
+      </div>
+    </div>
+  </div> -->
+  
+
+  <div class="container mt-3">
+    <div class="row">
+  
+
+      <div class="col-lg-2 col-md-2 d-none d-md-block text-center">
+        <div class="ad-container" style="height: 100%;">
+          <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg" alt="Left Ad" class="img-fluid" style="border-radius: 10px; height: 100%;">
+        </div>
+      </div>
+
+      <div class="col-6 d-block d-sm-none text-center mb-3 mt-3">
+        <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg"
+             style="border-radius: 31px; width: 100%; height: 180px; object-fit: fill;"
+             alt="Left Ad Small">
+      </div>
+      <div class="col-6 d-block d-sm-none text-center mb-3 mt-3">
+        <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg"
+             style="border-radius: 31px; width: 100%; height: 180px; object-fit: fill;"
+             alt="Middle Image Small">
+      </div>
+  
+
+      <div class="col-lg-8 col-md-8 col-sm-12 text-center">
+        <div id="carouselExample" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let slide of slides; let i = index" [class.active]="i === 0">
+              <img 
+                [src]="slide.image_location ? 'data:image/jpeg;base64,' + slide.image_location : '../../assets/images/modi.jpg'" 
+                class="img-fluid responsive-image" 
+                alt="Image" 
+                style="border-radius: 31px; object-fit: fill; cursor: pointer;" 
+                (click)="navigateToCategory(slide._id)"
+              >
+              <div class="carousel-caption d-md-block" style="background: none;">
+                <h5 style="color: white;">{{ slide.name }}</h5>
+              </div>
+            </div>
+          </div>
+  
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+  
+
+      <div class="col-lg-2 col-md-2 d-none d-md-block text-center">
+        <div class="ad-container" style="height: 100%;">
+          <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg" alt="Right Ad" class="img-fluid" style="border-radius: 10px; height: 100%;">
+        </div>
+      </div>
+  
+      <!-- Images Side by Side (Small Devices) -->
+      <!-- <div class="col-6 d-block d-sm-none text-center mb-3 mt-3">
+        <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg"
+             style="border-radius: 31px; width: 100%; height: 180px; object-fit: fill;"
+             alt="Left Ad Small">
+      </div>
+      <div class="col-6 d-block d-sm-none text-center mb-3 mt-3">
+        <img src="../../assets/images/god-lord-krishna-wallpaper-preview.jpg"
+             style="border-radius: 31px; width: 100%; height: 180px; object-fit: fill;"
+             alt="Middle Image Small">
+      </div> -->
+  
     </div>
   </div>
   
+
+
+
+
+
+
   
-  
-  <div class="container" style="margin-top: 100px;">
+  <!-- <div class="container" style="margin-top: 70px;">
     <div class="row">
       <div class="col-md-3" *ngIf="categories && categories.length > 0; else noCategories">
-        <div *ngFor="let category of categories" class="category-card">
+        <div *ngFor="let category of categories" class="category-card" style="cursor: pointer;" (click)="navigateToCategory(category._id)">
           <span class="bullet">&#10146;</span> {{ category.name }}
         </div>
-        <div *ngFor="let category of religious" class="category-card">
+        <div *ngFor="let category of religious" class="category-card" style="cursor: pointer;" (click)="navigateToCategory(category._id)">
           <span class="bullet">&#10146;</span> {{ category.name }}
         </div>
       </div>
@@ -54,11 +182,129 @@
         <p>No categories found.</p>
       </ng-template>
   
-      <!-- Image Section -->
+ 
       <div class="col-md-8">
-        <img src="../../assets/images/1st chart.png" alt="Chart" class="img-fluid custom-img" />
+        <img src="../../assets/images/homepage flowchat (1).png" alt="Chart" class="img-fluid custom-img" />
       </div>
     </div>
+  </div> -->
+
+
+
+  <div class="container-fluid">
+    <div class="row">
+  
+  
+  
+      <div class="col-md-2 d-none d-md-block" style="margin-top: 80px;">
+
+        <div class="image-container" style="position: relative;">
+          <img src="../../assets/images/saynotoplastic.webp" 
+               class="img-fluid" 
+               style="height: 600px; width: 100%; object-fit: fill;" 
+               alt="Right Ad Space" 
+               id="right-banner-image">
+        </div>
+      </div>
+      
+  
+  
+      <div class="col-md-8 mt-3">
+  
+        <!-- <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1 style="font-size: 30px; font-weight: bold;" class="text-center">Index</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div *ngFor="let org of categories" class="col-4">
+              <div class="text-center">
+                <a (click)="navigateToCategory(org._id)">
+                  <img [src]="org.image_location ? 'data:image/jpeg;base64,' + org.image_location : '../../assets/images/noImageDataImage.jpg'"
+                       style="height: 25vh; width: 30vh; border-radius: 20px;"
+                       class="img-fluid img-thumbnail mx-2"
+                       alt="image">
+                </a>
+                <p class="text-center">{{ org.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        
+
+
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1 style="font-size: 30px; font-weight: bold;" class="text-center">Index</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div *ngFor="let org of categories" class="col-6 col-md-4"> 
+              <div class="text-center">
+                <a (click)="navigateToCategory(org._id)">
+                  <img [src]="org.image_location ? 'data:image/jpeg;base64,' + org.image_location : '../../assets/images/noImageDataImage.jpg'"
+                       style="height: 25vh; width: 30vh; border-radius: 20px;"
+                       class="img-fluid img-thumbnail mx-2"
+                       alt="image">
+                </a>
+                <p class="text-center">{{ org.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-12 text-center mt-1 mb-1">
+          <button (click)="navigateToindex()" class="p-2" 
+                  style="border-width: 0px;background-color: rgb(241, 124, 15);border-radius:20px;color: white;">
+            View more Index
+          </button>
+        </div>
+  
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1 style="font-size: 30px;font-weight: bold;" class="text-center">Training</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div *ngFor="let org of training" class="col-6 col-md-3">
+              <div class="text-center">
+                <a (click)="navigateToTraining()">
+                  <img [src]="org.image ? 'data:image/jpeg;base64,' + org.image : '../../assets/images/noImageDataImage.jpg'" 
+                       style="height: 25vh; width: 30vh; border-radius:20px;" 
+                       class="img-fluid img-thumbnail mx-2" 
+                       alt="image">
+                </a>
+                <p class="text-center">{{ org.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 text-center mt-3">
+          <button (click)="navigateToTraining()" class="p-2" 
+                  style="border-width: 0px;background-color: rgb(241, 124, 15);border-radius:20px;color: white;">
+            View more Trainings
+          </button>
+        </div>
+      </div>
+  
+  
+      <div class="col-md-2 d-none d-md-block" style="margin-top: 80px;">
+        <div class="image-container" style="position: relative;">
+          <img src="../../assets/images/saynotoplastic.webp" 
+               class="img-fluid" 
+               style="height: 600px; width: 100%; object-fit: fill;" 
+               alt="Right Ad Space" 
+               id="right-banner-image">
+        </div>
+
+      </div>
+  
+    </div>
   </div>
+
   
 
+</div>

@@ -1,10 +1,13 @@
-.highlight {
-    background-color: yellow; /* Highlight color */
-    font-weight: bold; /* Optional: make it bold */
-    cursor: pointer; /* Indicate that it's clickable */
-  }
-  
-  .highlight:hover {
-    text-decoration: underline; /* Underline on hover */
-  }
-  
+/* Optional: Additional styles for side-menu-open class */
+.side-menu-open .side-menu {
+  display: block !important;
+}
+
+.custom-padding {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+*::-webkit-scrollbar {
+  width: 0px !important;
+  background-color: white !important;
+}
