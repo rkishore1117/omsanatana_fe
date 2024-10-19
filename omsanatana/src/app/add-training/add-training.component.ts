@@ -99,10 +99,10 @@ private trainingservice:TrainingService,
       trainer_name: ['', Validators.required],
       contact_details: ['', Validators.required],
       video: [''],
-      training_type: ['offline',Validators.required],
+      training_type: [''],
       geo_site: ['DISTRICT'],
       category: ['', Validators.required],     
-      user:localStorage.getItem('user'),
+      user_id:localStorage.getItem('user'),
       continent: ['', [Validators.required]],      
       status: ['PENDING'],
       country: ['', [Validators.required]],
@@ -290,12 +290,13 @@ private trainingservice:TrainingService,
   // }
 
   loading: boolean = false;
+  organization: any = null;
+  displayName = 'Training';
 
   
   onSubmit() {
     if (this.organizationForm.valid) {
-      this.loading = true; // Start loader
-
+      this.loading = true; 
       const formValue = { ...this.organizationForm.value };
       
       const selectedCategory = formValue.category;
@@ -312,12 +313,16 @@ private trainingservice:TrainingService,
   
       console.log('Form value before submitting:', formValue);
   
-      // Show loader
   
       this.trainingservice.addtraining(formValue).subscribe(
         (response) => {
           console.log('Training added successfully:', response);
           this.notificationHelper.showSuccessNotification('Add Training Success', '');
+          
+
+          this.organization = formValue;
+          this.displayName = "submission";
+          
           this.resetForm();
           this.loading = false;
 
@@ -334,7 +339,7 @@ private trainingservice:TrainingService,
           } else if (error.status === 403) {
             console.error('Error adding Training:', error);
             this.notificationHelper.showErrorNotification('Only ADMIN users can create training records.');
-            this.adminTrainerDialog();  // Open the Admin dialog here
+            this.adminTrainerDialog();  
           } else {
             console.error('Error adding Training:', error);
             this.notificationHelper.showErrorNotification('Training not added.');
@@ -379,7 +384,12 @@ private trainingservice:TrainingService,
     });
   }
   
-
+  getVideoUrl(): string {
+    if (this.organization && this.organization.video) {
+      return `data:video/mp4;base64, ${this.organization.video}`;
+    }
+    return '';
+  }
 
   resetForm() {
     this.organizationForm.reset();

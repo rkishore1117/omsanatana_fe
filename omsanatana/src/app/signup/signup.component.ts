@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
   signupForm!: FormGroup;
   isIndianUser: boolean = false;
   usernameType: string = 'email';
-
+  loginType: string = 'email';
   constructor(private userService: UserService,
      private fb: FormBuilder ,
      private dialog:MatDialog,
@@ -29,11 +29,17 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group({
       // userType: ['non-indian', Validators.required],
-      username: ['', [Validators.required, phoneOrEmailValidator()]]
-     
+      username: ['', [Validators.required, phoneOrEmailValidator()]],
+      // loginType: ['email'],
     });
 
 
+  }
+
+
+
+  setLoginType(type: string): void {
+    this.loginType = type;
   }
 
   onSubmit(): void {

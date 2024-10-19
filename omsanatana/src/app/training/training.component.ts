@@ -232,7 +232,7 @@ export class TrainingComponent {
 
   onReset(): void {
     this.validatorForm.reset();
-    this.selectedLocationId = [];
+    this.selectedLocationId =null;
     this.applyFilters();
     // this.loadTrainings();
   }

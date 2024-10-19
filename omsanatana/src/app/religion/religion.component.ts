@@ -29,16 +29,15 @@ export class ReligionComponent {
   nodes: NzTreeNodeOptions[] = [];
   searchValue: string = '';
   categoryData: any;
-
-
-
+  isSideMenuOpen = false;
+  categoryId: any;
+  lastSelectedCategoryId: string | null = null;
 
   constructor(private religiousservice:ReligiousService,private router:Router, private dialog:MatDialog,private route:ActivatedRoute, private fb:FormBuilder,private cdr: ChangeDetectorRef ,private sanitizer: DomSanitizer) {}
 
 
 
 
-categoryId: any;
 
 
 
@@ -50,8 +49,18 @@ ngOnInit(): void {
       this.categoryId = +id; 
       this.fetchCategoryData(this.categoryId); 
     }
+
+    
   });
   
+  this.route.paramMap.subscribe(params => {
+    const categoryId = params.get('id');
+    if (categoryId) {
+      this.selectedCategoryId = categoryId;
+      this.fetchCategoryData(categoryId); 
+    }
+  });
+
   this.selectedCategoryId = this.route.snapshot.paramMap.get('id');
 
 
@@ -71,7 +80,7 @@ ngOnInit(): void {
     },
     (err: any) => console.error('Error loading categories:', err) 
   );
-  this.fetchDefaultCategoryData();
+  // this.fetchDefaultCategoryData();
 
 }
 
@@ -91,7 +100,7 @@ onCategoryClick(event: NzFormatEmitEvent): void {
     
     return; 
   }
-
+  this.lastSelectedCategoryId = this.selectedCategoryId;
   this.fetchCategoryData(this.selectedCategoryId);
 
   if (!node.isExpanded && node.children.length === 0 && !node.isLeaf) {
@@ -109,8 +118,10 @@ onCategoryClick(event: NzFormatEmitEvent): void {
   }
 }
 
-fetchCategoryData(categoryId: string): void {
-  this.religiousservice.getbydata(categoryId).subscribe(
+
+
+fetchCategoryData(categoryIdentifier: string): void {
+  this.religiousservice.getbydata(categoryIdentifier).subscribe(
     (data: any) => {
       this.categoryData = data; 
       console.log('Fetched category data:', this.categoryData);
@@ -219,44 +230,14 @@ createNodeTree(data: any[]): NzTreeNodeOptions[] {
 
 
 
-  isSideMenuOpen = false;
-  // isFilterVisible = true;
   toggleSideMenu() {
     this.isSideMenuOpen = !this.isSideMenuOpen;
-  }
 
 
-  // highlightText(text: string): string {
-  //   if (!text || !this.categoryData) {
-  //     return text;
-  //   }
-
-  //   const categoryNames = [this.categoryData.name, ...(this.categoryData.subcategories || []).map((sub: { name: any; }) => sub.name)];
-    
-  //   const escapedNames = categoryNames.map(name => name.replace(/[-\/\\^$.*+?()[\]{}|]/g, '\\$&'));
-    
-  //   const pattern = escapedNames.join('|'); 
-  //   const regex = new RegExp(`(${pattern})`, 'gi'); 
-
-  //   return text.replace(regex, (match) => {
-  //     return `<a href="javascript:void(0);" class="highlight" (click)="navigateToCategory('${match}')">${match}</a>`;
-  //   });
-  // }
-
-
-  
-  highlightText(text: string): SafeHtml {
-    const keywords: string[] = ['Ancient Literature', 'Vedic Science and Traditions', 'Religion', 'Sruti','the'];
-    const regex = new RegExp(`(${keywords.join('|')})`, 'gi');
-    const highlightedText = text.replace(regex, '<span class="highlight">$1</span>');
-    return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
-  }
-
-
-  
-  navigateToCategory(categoryName: string): void {
-    const category = this.categoryData.subcategories.find((sub: { name: string; }) => sub.name === categoryName) || this.categoryData;
-    this.selectedCategoryId = category._id; 
+    if (!this.isSideMenuOpen && this.lastSelectedCategoryId) {
+      this.selectedCategoryId = this.lastSelectedCategoryId;
+      this.fetchCategoryData(this.selectedCategoryId);
+    }
   }
 
 
@@ -264,6 +245,76 @@ createNodeTree(data: any[]): NzTreeNodeOptions[] {
 
 
 
+
+  keywords: any = {
+    'Ancient Literature': ['Smriti', 'Shruti','Rigveda'],
+    'Shruti':['Atharvaveda','Samaveda','Yajurveda','Rigveda'],
+    'Smriti':['Ithihas(Epic)','Up-Puranas','Puranas','Dharshana','Upavedas','Vedangas'],
+
+    'Rigveda':['RigVeda-Upanishad','RigVeda-Aranyak','RigVeda-Brahamana','RigVeda-Samhita'],
+    'Yajurveda':['YajurVeda-Shukla','YajurVeda-Upanishad','YajurVeda-Aranyak','YajurVeda-Brahmana','YajurVeda-Samhita'],
+    'Samaveda':['SamaVeda-Upanishad','SamaVeda-Aranyak','SamaVeda-Brahmana','SamaVeda-Samhita'],
+    'Atharvaveda':['AtharvaVeda-Upanishad','AtharvaVeda-Aranyak','AtharvaVeda-Brahmana','AtharvaVeda-Samhita'],
+
+    'Vedangas':['Chhanda','Arthashashtra(Economics)','Jyotisha(Astrology)','Kanda(Metre)','Nirukta(Glossary)','Vyakarana(Grammer)','Kalpa(Religious Rights)','Shikha(Phonetics)'],
+    'Upavedas':['Arthveda Veda(Economics and politics)','Gandharva Veda(Art and Music)','Gandharva Veda(Art and Music)','Ayurveda(Health Science)'],
+    'Puranas':['Brahmanda Purana','Garuda Purana','Matshya Purana','Kurma Purana','Vamana Purana','Skanda Purana','Varaha Purana','Linga Purana','Brahma vaivartha Purana','Bhavishya Purana','Agni Purana','Markandeya Purana','Narada Purana','Bagavath Purana','Vayu Purana','Vishnu purana','Padma Purana','Brahma Purana','Puranas'],
+    'Up-Puranas':['Samba Purana','Devibhagavata Purana','Kalika Purana','Lakhunaradheeya Purana','Harivamsa Purana','Vishnudharmmoththara Purana','Kaliki Purana','Mulgala Purana','Aadhi Purana',' Aathma Purana', 'Brahma Purana', 'Vishnudharma Purana','Narasimha Purana','Kriyaayoga Purana','Surya Purana', 'Bruhat Naradheeya Purana', 'Prushoththma Purana','Bruhat Vishnu Purana'],
+    'Ithihas(Epic)':['Bhagvat Gita','Mahabharatha','Ramayana'],
+
+
+    'Vedic Science and Traditions': ['Astrology', 'Astronomy', 'Ayurveda', 'Yoga',  'Vasthu',],
+
+    'Religion': ['Hinduism', 'Buddhism', 'Jainism', 'Sikhism'],
+
+
+  };
+
+
+
+// highlightText(text: string): string {
+//   let highlightedText = text;
+
+//   Object.keys(this.keywords).forEach(selectedCategoryId => {
+//     this.keywords[selectedCategoryId].forEach((keyword: string) => {
+//       const regex = new RegExp(`(${this.escapeRegExp(keyword)})`, 'gi');
+//       highlightedText = highlightedText.replace(regex, `<a href="religion/${selectedCategoryId}" >$1</a>`);
+      
+//     });
+//   });
+
+//   return highlightedText;
+// }
+
+private escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+
+highlightText(text: string): SafeHtml {
+  const allKeywords = Object.keys(this.keywords).flatMap(key => this.keywords[key]);
+  const regex = new RegExp(`\\b(${allKeywords.join('|')})\\b`, 'gi');
+
+  const highlightedText = text.replace(regex, (matched) => {
+    return `<span class="highlight-keyword" style="color: #ff5500; font-weight: bold; cursor: pointer;">${matched}</span>`;
+  });
+
+  return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
+}
+
+
+handleKeywordClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  const keyword = target.innerText; 
+
+  if (this.keywords && Object.values(this.keywords).flat().includes(keyword)) {
+    this.navigateToCategory(keyword); 
+  }
+}
+
+navigateToCategory(keyword: string) {
+  this.router.navigate(['/religion', keyword]); 
+}
 
 
 
@@ -274,3 +325,6 @@ createNodeTree(data: any[]): NzTreeNodeOptions[] {
 
 
 }
+
+
+

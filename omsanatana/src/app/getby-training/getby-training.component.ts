@@ -22,6 +22,8 @@ export class GetbyTrainingComponent {
   ngOnInit(): void {
     this.organizationId = this.route.snapshot.paramMap.get('id');
     this.gettraining();
+
+    
   }
 
   gettraining(): void {
@@ -39,7 +41,7 @@ export class GetbyTrainingComponent {
 
   getVideoUrl(): string {
     if (this.organization && this.organization.video) {
-      return `${this.organization.video}`;
+      return `data:video/mp4;base64, ${this.organization.video}`;
     }
     return '';
   }

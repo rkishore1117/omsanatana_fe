@@ -50,7 +50,7 @@ export class TrainingService {
       }
 
       addtraining(training: any): Observable<any> {
-        return this.httpClient.post(URL+"training", training);
+        return this.httpClient.post(URL+"training/", training);
       }
 
 

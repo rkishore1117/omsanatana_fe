@@ -36,7 +36,7 @@ specificminisubcategeories(_id: string):Observable<any>{
 
 
 getbydata(_id: string):Observable<any>{
-  return this.httpClient.get(URL+'categoriesdata/'+_id)
+  return this.httpClient.get(URL+'categoriesdata/'+_id+'/')
 }
 
 

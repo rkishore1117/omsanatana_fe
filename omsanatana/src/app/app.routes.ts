@@ -14,9 +14,9 @@ import { AboutUsComponent } from './about-us/about-us.component';
 export const routes: Routes = [
     {path:'home',component:HomeComponent},
     {path:'',pathMatch:'full',redirectTo:'home'},
-    {path:'religion/:id',component:ReligionComponent},
-    {path:'profile',component:ProfileComponent},
-    {path:'Training',component:TrainingComponent},
+    {path:'religion/:id',component:ReligionComponent,canActivate: [LoggedinguardGuard],},
+    {path:'profile',component:ProfileComponent,canActivate: [LoggedinguardGuard],},
+    {path:'Training',component:TrainingComponent,canActivate: [LoggedinguardGuard],},
     {path:'getbytraining/:id',component:GetbyTrainingComponent},
     {path:'add-training',component:AddTrainingComponent,canActivate: [LoggedinguardGuard], },
     {path:'signup',component:SignupComponent},

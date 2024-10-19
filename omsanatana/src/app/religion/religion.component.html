@@ -1,25 +1,7 @@
 
   <div class="container" >
     <div class="row">
-      <!-- <div class="col-md-3 col-lg-3 col-xl-2 custom-padding" style="margin-top: 100px; position: sticky; top: 100px;">
-        <div>
-          <div class="card shadow-sm">
-            <div class="card-header" style="background: linear-gradient(to right, #ff5500, #FF8c00); color: white;">
-              <h6 class="mb-0" style="font-size: 20px;">Categories Filters</h6>
-            </div>
-            <div class="card-body" style="height: 80vh; overflow-y: auto;">
-              <nz-tree
-                [nzData]="nodes"
-                [nzSearchValue]="searchValue"
-                (nzClick)="onCategoryClick($event)" 
-                nzBlockNode 
-              >
-            
-            </nz-tree>
-            </div>
-          </div>
-        </div>
-      </div> -->
+
       <div class="col-md-3 col-lg-3 col-xl-2 custom-padding " [ngClass]="{'side-menu-open': isSideMenuOpen}" style="margin-top: 100px; ">
         <div>
           <button class="btn btn-primary d-md-none mb-2" (click)="toggleSideMenu()" aria-label="Toggle menu">
@@ -44,19 +26,32 @@
       </div>
       
       
-      <div class="col-md-9 col-lg-9 col-xl-10" style="margin-top: 100px; height: 80vh; overflow-y: auto;">
+      <div class="col-md-9 col-lg-9 col-xl-10" style="margin-top: 100px; height: 85vh; overflow-y: auto;">
         <div *ngIf="categoryData" class="category-details">
           <h2 style="text-align: center;color: #ff5500;">{{ categoryData.name }}</h2>
           <p >{{ categoryData.desc }}</p>
           <div *ngFor="let item of categoryData.file_path.data">
             <div *ngIf="item.type === 'text'">
-              <!-- <p style="text-align: justify;font-size: 18px;" [innerHTML]="highlightText(item.text)"></p> -->
-              <p style="text-align: justify;">{{ item.text }}</p>
+              <p style="text-align: justify; font-size: 18px;" [innerHTML]="highlightText(item.text)" (click)="handleKeywordClick($event)">
+
+              <!-- <p style="text-align: justify;font-size: 18px;" [innerHTML]="highlightText(item.text)" ></p> -->
+            <!-- <p  style="text-align: justify;font-size: 18px;" > {{ item.text}}</p> -->
             </div>
             <div *ngIf="item.type === 'image'" class="d-flex justify-content-center align-items-center">
               <img [src]="item.image ? 'data:image/jpeg;base64,' + item.image : ''" alt="{{ categoryData.name }}" class="img-fluid" />
             </div>
+
           </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <!-- <img 
+              [src]="categoryData.image_location ? 'data:image/jpeg;base64,' + categoryData.image_location : ''" 
+              style="object-fit: fill; width: 60%; height: 300px;" 
+              
+            /> -->
+          </div>
+          
+          
+
         </div>
       </div>
       

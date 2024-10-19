@@ -109,8 +109,8 @@
             <a (click)="navigatetrainigDetail(organization._id)">
               <img 
                 [src]="organization.image && organization.image !== 'data not found' 
-                       ?  organization.image 
-                       : '../../assets/images/world.png'" 
+                       ? 'data:image/jpeg;base64,' +  organization.image 
+                       : '../../assets/images/profile1.webp'" 
                 class="img-fluid img-thumbnail mx-2" 
                 style="height: 18vh; width: 100%; max-width: 150px; border-radius: 20px;" 
                 alt="Training Image">
