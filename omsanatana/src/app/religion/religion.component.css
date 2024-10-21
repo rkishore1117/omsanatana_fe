@@ -12,3 +12,57 @@
   background-color: white !important;
 }
 
+/* .loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+} */
+/* Loader styles */
+.loader {
+  position: absolute; /* Positioning the loader */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  right: 0; /* Align to the right */
+  bottom: 0; /* Align to the bottom */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it appears above other elements */
+  display: flex; /* Center the loader */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+/* Spinner styles */
+.spinner-border {
+  width: 3rem; /* Set the width of the spinner */
+  height: 3rem; /* Set the height of the spinner */
+}
+
+/* Optional: Adjust the category details container */
+.category-details {
+  position: relative; /* Relative positioning for the content */
+  padding: 20px; /* Add some padding */
+  background: #f8f9fa; /* Light background for contrast */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Media query for responsive adjustments */
+@media (max-width: 768px) {
+  .loader {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly more opaque on smaller screens */
+  }
+  
+  .category-details {
+    padding: 10px; /* Less padding on smaller screens */
+  }
+}
+
+
+.fixed-size-image {
+  width: 75%; /* Set your desired width */
+  height: 40vh; /* Set your desired height */
+  object-fit: fill; /* Maintain aspect ratio and cover the area */
+}
+

@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HomeService } from '../services/home.service';
 import { CommonModule } from '@angular/common';
+import { NgxSpinnerModule,NgxSpinnerService } from "ngx-spinner";
+
 // import {
 //   CarouselComponent,
 //   CarouselInnerComponent,
@@ -20,7 +22,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,NgxSpinnerModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -36,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy{
 
 
 
-  constructor(private homepageservice:HomeService,private router:Router, private dialog:MatDialog,) {}
+  constructor(private homepageservice:HomeService,private router:Router, private dialog:MatDialog,    private spinner: NgxSpinnerService,) {}
 
   ngOnInit(): void {
     this.fetchhome();
@@ -46,17 +48,19 @@ export class HomeComponent implements OnInit, OnDestroy{
   }
 
   fetchhome(): void {
+    this.spinner.show();
     this.homepageservice.homepage().subscribe(
       (data: any) => {
         this.categories = data.index;
         // this.religious = data.religion_categories;
-
+this.spinner.hide();
 
       },
       (error) => {
         console.error('Error fetching organizations:', error);
       }
     );
+    this.spinner.hide();
   }
 
   fetchtraining(): void {

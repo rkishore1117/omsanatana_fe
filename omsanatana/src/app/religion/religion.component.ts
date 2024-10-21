@@ -13,11 +13,13 @@ import { NzTreeNode, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { FormGroup, FormsModule,Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DomSanitizer ,SafeHtml } from '@angular/platform-browser';
+import { NgxSpinnerModule,NgxSpinnerService } from "ngx-spinner";
+
 
 @Component({
   selector: 'app-religion',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,NzSelectModule,NzFormModule,NzTreeModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,NzSelectModule,NzFormModule,NzTreeModule,NgxSpinnerModule],
   templateUrl: './religion.component.html',
   styleUrl: './religion.component.css'
 })
@@ -33,13 +35,9 @@ export class ReligionComponent {
   categoryId: any;
   lastSelectedCategoryId: string | null = null;
 
-  constructor(private religiousservice:ReligiousService,private router:Router, private dialog:MatDialog,private route:ActivatedRoute, private fb:FormBuilder,private cdr: ChangeDetectorRef ,private sanitizer: DomSanitizer) {}
-
-
-
-
-
-
+  constructor(private religiousservice:ReligiousService,private router:Router, private dialog:MatDialog,private route:ActivatedRoute, private fb:FormBuilder,private cdr: ChangeDetectorRef ,private sanitizer: DomSanitizer,
+    private spinner: NgxSpinnerService,
+  ) {}
 
 
 ngOnInit(): void {
@@ -65,7 +63,7 @@ ngOnInit(): void {
 
 
 
-  
+  this.isLoading = true;
   this.religiousservice.categeories().subscribe(
     (response: any) => {
       const categories = response.results;
@@ -77,9 +75,11 @@ ngOnInit(): void {
       if (this.selectedCategoryId) {
         this.fetchCategoryData(this.selectedCategoryId);
       }
+      this.isLoading = false;
     },
     (err: any) => console.error('Error loading categories:', err) 
   );
+  this.isLoading = false;
   // this.fetchDefaultCategoryData();
 
 }
@@ -93,7 +93,6 @@ onCategoryClick(event: NzFormatEmitEvent): void {
 
   console.log(this.selectedCategoryId, "Category clicked");
 
-  // this.router.navigate(["organizations", this.selectedCategoryId]);
 
   if (this.selectedCategoryId === 'AllTemples') {
     this.selectedCategoryId = null; 
@@ -101,6 +100,7 @@ onCategoryClick(event: NzFormatEmitEvent): void {
     return; 
   }
   this.lastSelectedCategoryId = this.selectedCategoryId;
+  
   this.fetchCategoryData(this.selectedCategoryId);
 
   if (!node.isExpanded && node.children.length === 0 && !node.isLeaf) {
@@ -118,19 +118,37 @@ onCategoryClick(event: NzFormatEmitEvent): void {
   }
 }
 
-
+isLoading = false;
 
 fetchCategoryData(categoryIdentifier: string): void {
+  this.isLoading = true; // Set loading to true before making the request
+  
   this.religiousservice.getbydata(categoryIdentifier).subscribe(
     (data: any) => {
       this.categoryData = data; 
       console.log('Fetched category data:', this.categoryData);
+      this.isLoading = false; // Set loading to false after data is fetched
     },
-    (err: any) => console.error('Error fetching category data:', err)
+    (err: any) => {
+      console.error('Error fetching category data:', err);
+      this.isLoading = false; // Ensure loading is false even on error
+    }
   );
 }
 
 
+// fetchCategoryData(categoryIdentifier: string): void {
+//   this.spinner.show();
+//   this.religiousservice.getbydata(categoryIdentifier).subscribe(
+//     (data: any) => {
+//       this.categoryData = data; 
+//       console.log('Fetched category data:', this.categoryData);
+//       this.spinner.hide();
+//     },
+//     (err: any) => console.error('Error fetching category data:', err)
+//   );
+//   this.spinner.hide();
+// }
 
 loadSubcategories(node: NzTreeNode, categoryId: string | null): void {
   if (!categoryId) {
@@ -247,74 +265,79 @@ createNodeTree(data: any[]): NzTreeNodeOptions[] {
 
 
   keywords: any = {
+
     'Ancient Literature': ['Smriti', 'Shruti','Rigveda'],
     'Shruti':['Atharvaveda','Samaveda','Yajurveda','Rigveda'],
     'Smriti':['Ithihas(Epic)','Up-Puranas','Puranas','Dharshana','Upavedas','Vedangas'],
-
     'Rigveda':['RigVeda-Upanishad','RigVeda-Aranyak','RigVeda-Brahamana','RigVeda-Samhita'],
     'Yajurveda':['YajurVeda-Shukla','YajurVeda-Upanishad','YajurVeda-Aranyak','YajurVeda-Brahmana','YajurVeda-Samhita'],
     'Samaveda':['SamaVeda-Upanishad','SamaVeda-Aranyak','SamaVeda-Brahmana','SamaVeda-Samhita'],
     'Atharvaveda':['AtharvaVeda-Upanishad','AtharvaVeda-Aranyak','AtharvaVeda-Brahmana','AtharvaVeda-Samhita'],
-
     'Vedangas':['Chhanda','Arthashashtra(Economics)','Jyotisha(Astrology)','Kanda(Metre)','Nirukta(Glossary)','Vyakarana(Grammer)','Kalpa(Religious Rights)','Shikha(Phonetics)'],
     'Upavedas':['Arthveda Veda(Economics and politics)','Gandharva Veda(Art and Music)','Gandharva Veda(Art and Music)','Ayurveda(Health Science)'],
     'Puranas':['Brahmanda Purana','Garuda Purana','Matshya Purana','Kurma Purana','Vamana Purana','Skanda Purana','Varaha Purana','Linga Purana','Brahma vaivartha Purana','Bhavishya Purana','Agni Purana','Markandeya Purana','Narada Purana','Bagavath Purana','Vayu Purana','Vishnu purana','Padma Purana','Brahma Purana','Puranas'],
     'Up-Puranas':['Samba Purana','Devibhagavata Purana','Kalika Purana','Lakhunaradheeya Purana','Harivamsa Purana','Vishnudharmmoththara Purana','Kaliki Purana','Mulgala Purana','Aadhi Purana',' Aathma Purana', 'Brahma Purana', 'Vishnudharma Purana','Narasimha Purana','Kriyaayoga Purana','Surya Purana', 'Bruhat Naradheeya Purana', 'Prushoththma Purana','Bruhat Vishnu Purana'],
     'Ithihas(Epic)':['Bhagvat Gita','Mahabharatha','Ramayana'],
-
-
-    'Vedic Science and Traditions': ['Astrology', 'Astronomy', 'Ayurveda', 'Yoga',  'Vasthu',],
-
+    // Vedic Science and Traditions
+    'Vedic Science and Traditions': [ 'Astronomy', 'Ayurveda', 'Yoga',  'Vasthu','Astrology', ],
+    'Astrology':["Chinese astrology","Judicial astrology","Locational astrology","Mayan astrology","Natal astrology","Relationship astrology","Uranian astrology","Vedic astrology"],
+    'Ayurveda': ["Agada Tantra (Toxicology)","Ayurvedic Nutrition (Ahara Chikitsa)","Bhuta Vidya (Psychiatry and Mental Health)","Doshas in Ayurveda (Vata, Pitta, Kapha)","Kaumarbhritya (Pediatrics and Obstetrics)","Kayachikitsa (Internal Medicine)","Panchakarma","Rasayana (Rejuvenation and Anti-Aging)","Shalakya Tantra (ENT and Eye Disorders)","Shalya Tantra (Surgery)","Swastavritta (Preventive Medicine and Lifestyle Management)","Vajikarana (Aphrodisiacs and Fertility)"],
+    "Yoga": ["Ashtanga Yoga","Bhakti Yoga","Hatha Yoga","Integral Yoga","Jivamukti Yoga","Jnana Yoga","Karma Yoga","Kundalini Yoga","Raja Yoga","Tantra Yoga","Yin Yoga"],
+    "Vasthu": ["Agricultural Vastu (Krishi Vastu)","Commercial Vastu","Corporate Vastu","Educational Vastu","Health Care Vastu (Hospital Vastu)","Industrial Vastu","Plot Vastu","Residential Vastu (Griha Vastu)","Temple Vastu (Mandir Vastu)","Vastu for Hotels & Restaurants"],
+    "Astronomy":["Calculation of Time (Kala)","Calendrical Astronomy","Cosmic Cycles and Yugas","Eclipse Prediction","Graha (Planets)","Nakshatras (Lunar Mansions)","Parallax and Distance Measurement","Siddhantic Astronomy (Siddhanta Jyotisha)","Surya Siddhanta"],
+    // Religion
     'Religion': ['Hinduism', 'Buddhism', 'Jainism', 'Sikhism'],
+    'Hinduism': ['Festivals', 'Functions', 'Pujas', "Famous Guru's and Saints", 'Temples', 'Muhurtas', 'Philosophy', 'Cultural Arts', ],
+   // Hinduism
+   'Festivals': ['Ugadi(Baisakhi )', 'Sri Rama Navami', 'Hanuman Jayanti', 'Janmastami', 'Guru Purnima', 'Ganesh Chaturti','Navaratri','Diwali','Makara Sankranthi','Maha Shivarathri','Holi','Raksha Bandhan','Ekadashi','Dhnateras','Chhath Puja','Basant Panchami','Karva Chauth','Onam'],
+   'Functions': ['Garbhadan(Conception)','Pumsavana(Engendering a male issue)','Simantonayana (Hair-parting)','Jatakarma (Birth rituals)','Namkaran (Name-giving)','Nishkrama (First outing)','Annaprashan (First feeding)','Chudakarma (Chaul) (Shaving of head)','Karnavedh (Piercing the earlobes)','Vidyarambh (Learning the alphabet)','Upanayan (Yagnopavit)','Vedarambh (Beginning Vedic study)','Keshant (Godaan) (Shaving the beard)','Samavartan (End of Studentship)','Vivaha','Antyesthi (Death rites)'],
+   'Pujas': [' Ganesh Pooja','Lakshmi Pooja','Durga Pooja','Shiva Pooja(Mahashivaratri)','Vishnu Pooja','Saraswati Pooja(Vasant Panchami )','Satyanarayana Pooja','Hanuman Pooja(Hanuman Jayanti)','Navagraha Pooja','Kali Pooja','Chandi Homa/Pooja','Vastu Pooja','Pitru Pooja (Shraddha)','Gayatri Pooja','Karthika Deepam Pooja'],
+   "Famous Guru's and Saints":['Adi Shankaracharya (8th Century CE)','Rishi Vyasa','Patanjali','Ramanujacharya (1017–1137 CE)','Sant Kabir (1440–1518 CE)','Madhvacharya (1238–1317 CE)','Sant Tulsidas (1532–1623 CE)','Sant Mirabai (1498–1547 CE)','Sant Eknath (1533–1599 CE)','Swami Vivekananda (1863–1902 CE)','Ramakrishna Paramahamsa (1836–1886 CE)','Sri Aurobindo (1872–1950 CE)','Sri Ramana Maharshi','DATTATREYA','Dayananda Saraswati'],
+   'Temples':['Ruins','Ayyappa Swamy','Asta Vinayaka','Brahma','Bala Rama','Chota Chardham','Chardham','Chandi Mata','Durga Mata','Danteswari Mata','Gramadevata','Gayatri Mata','Ganapati','Hanuman','Iskon','Janaki','Jyothi Lingas','Jagannath','Kala Birava','Kali Mata','Muththmari Amman','Maha Lakshmi','Murugan','Maha Sakthi peetas','Maha Vishnu','Narasimha', 'Nava Grahalu','Other Category','Pancha Bhutha','Pancha Kedar','Pancha Preyar','Shani','Sri Krishna','Shitla Mata','Swamy Narayan','Sathya Narayana Swamy','Sakthi Peetas','Sri Rama','Subramanya Swamy','Shiva','Saraswati','Veera Badhra','Venkateshwara Swamy','Antediluvian','Matam'],
+   'Muhurtas': ['Tithi','Vaasara','Nakshatra','the yoga','Karan'],
+   'Philosophy':['Samkhya (Kapila)','Yoga (Patanjali)','Nyaya (Gautama Muni)','Vaisheshika (Kanada)','Purva Mimamsa (Jaimini)','Vedanta'],
+   'Cultural Arts': ['Dance','Music','Singing','Painting','Sculpture','Sewing','Embroidery','Dressing','Jewelry & Gems','Cooking - Eating - Drinking','Organic Food','Old Hindu Traditional - Festival Games','Games - Children Games','Ancient Martial Arts','Stories - Pancha Tantra Stories'],
+   'Buddhism': ['Festivals', 'Functions', 'Pujas', "Famous Guru's and Saints", 'Temples', 'Muhurtas', 'Philosophy', 'Cultural Arts', ],
+   'Jainism' : ['Festivals', 'Functions', 'Pujas', "Famous Guru's and Saints", 'Temples', 'Muhurtas', 'Philosophy', 'Cultural Arts', ],
+    'Sikhism' : ['Festivals', 'Functions', 'Pujas', "Famous Guru's and Saints", 'Temples', 'Muhurtas', 'Philosophy', 'Cultural Arts', ],
+// Buddhism
 
 
   };
 
 
 
-// highlightText(text: string): string {
-//   let highlightedText = text;
 
-//   Object.keys(this.keywords).forEach(selectedCategoryId => {
-//     this.keywords[selectedCategoryId].forEach((keyword: string) => {
-//       const regex = new RegExp(`(${this.escapeRegExp(keyword)})`, 'gi');
-//       highlightedText = highlightedText.replace(regex, `<a href="religion/${selectedCategoryId}" >$1</a>`);
-      
-//     });
-//   });
 
-//   return highlightedText;
-// }
+highlightText(text: string): SafeHtml {
+  const allKeywords = Object.keys(this.keywords).flatMap(key => this.keywords[key]);
+  const regex = new RegExp(`\\b(${allKeywords.join('|')})\\b`, 'gi');  
+  const highlightedText = text.replace(regex, (matched) => {
+    return `<span class="highlight-keyword" style="color: #FF5500; font-weight: bold; cursor: pointer;">${matched}</span>`;
+  });
+  return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
+}
+handleKeywordClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  const clickedKeyword = target.innerText.toLowerCase();  
+  const matchedKeyword = Object.values(this.keywords)
+    .flat()
+    .find((keyword) => (keyword as string).toLowerCase() === clickedKeyword);  
+  if (typeof matchedKeyword === 'string') {  
+    this.navigateToCategory(matchedKeyword);  
+  }
+}
+navigateToCategory(keyword: string) {
+  this.router.navigate(['/religion', keyword]);
+}
+
+
+
 
 private escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-
-highlightText(text: string): SafeHtml {
-  const allKeywords = Object.keys(this.keywords).flatMap(key => this.keywords[key]);
-  const regex = new RegExp(`\\b(${allKeywords.join('|')})\\b`, 'gi');
-
-  const highlightedText = text.replace(regex, (matched) => {
-    return `<span class="highlight-keyword" style="color: #ff5500; font-weight: bold; cursor: pointer;">${matched}</span>`;
-  });
-
-  return this.sanitizer.bypassSecurityTrustHtml(highlightedText);
-}
-
-
-handleKeywordClick(event: MouseEvent) {
-  const target = event.target as HTMLElement;
-  const keyword = target.innerText; 
-
-  if (this.keywords && Object.values(this.keywords).flat().includes(keyword)) {
-    this.navigateToCategory(keyword); 
-  }
-}
-
-navigateToCategory(keyword: string) {
-  this.router.navigate(['/religion', keyword]); 
-}
 
 
 
